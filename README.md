@@ -1,5 +1,11 @@
 # Yabai Wooting scripts
 
+## Installation requirements
+
+Both https://github.com/xiamaz/python-yabai-client and
+https://github.com/xiamaz/python-wooting-rgb need to be installed before these
+scripts can be run.
+
 ## Spaces indicator
 
 Use the following scripts for indicating the active space by adding the
