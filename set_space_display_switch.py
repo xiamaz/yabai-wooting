@@ -5,13 +5,10 @@ import sys
 from wooting_rgb import wooting_rgb_wrapper
 from yabai_client import YabaiClient
 
-ACTIVE_COLOR = (255, 0, 0)
+ACTIVE_COLOR = (255, 199, 0)
 
 active_did = int(sys.argv[1])
 last_did = int(sys.argv[2])
-
-with open("/tmp/logdid.txt", "a") as f:
-    f.write(f"{active_did} {last_did}\n")
 
 yc = YabaiClient()
 display_infos = yc.send_message("query --displays")

@@ -5,7 +5,7 @@ import sys
 from wooting_rgb import wooting_rgb_wrapper
 from yabai_client import YabaiClient
 
-ACTIVE_COLOR = (255, 0, 0)
+ACTIVE_COLOR = (255, 199, 0)
 
 active_id = int(sys.argv[1])
 last_id = int(sys.argv[2])
