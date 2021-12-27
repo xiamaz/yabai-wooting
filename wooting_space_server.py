@@ -2,10 +2,13 @@
 # pylint: skip-file
 # flake8: noqa
 
+import logging
 import pathlib
 import socketserver
 from yabai_client import YabaiClient
 from wooting_rgb import wooting_rgb_wrapper
+
+logging.basicConfig(level=logging.DEBUG)
 
 ACTIVE_COLOR = (255, 199, 0)  # currently active space
 INACTIVE_COLOR = (255, 255, 255)  # spaces not in focus
@@ -25,6 +28,30 @@ YC = YabaiClient()
 SERVER_ADDRESS="/tmp/yabai-wooting.socket"
 Colors = [ACTIVE_COLOR, INACTIVE_COLOR, DISABLED_COLOR]
 
+SIGNALS = [
+    {
+        "label":"wootserv",
+        "event":"space_changed",
+        "action":"echo \"space $YABAI_SPACE_ID\" | nc -U /tmp/yabai-wooting.socket"
+    },{
+        "label":"wootservda",
+        "event":"display_added",
+        "action":"echo \"refresh $YABAI_DISPLAY_ID\" | nc -U /tmp/yabai-wooting.socket"
+    },{
+        "label":"wootservdr",
+        "event":"display_removed",
+        "action":"echo \"refresh $YABAI_DISPLAY_ID\" | nc -U /tmp/yabai-wooting.socket"
+    },{
+        "label":"wootservdisplay",
+        "event":"display_changed",
+        "action":"echo \"refresh $YABAI_DISPLAY_ID\" | nc -U /tmp/yabai-wooting.socket"
+    },{
+        "label":"wootservmc",
+        "event":"mission_control_exit",
+        "action":"echo \"refresh $YABAI_DISPLAY_ID\" | nc -U /tmp/yabai-wooting.socket"
+    }
+]
+
 class YabaiWootingServer:
 
     def __init__(self):
@@ -33,7 +60,30 @@ class YabaiWootingServer:
         self._spacesData = None
 
         self._rgbStatus = [3]*MAX_KEYS
+        self._register_signals()
         self._initialize()
+
+    def _register_signals(self):
+        signals = YC.send_message("signal", "--list")
+        registered_labels = [s["label"] for s in signals]
+
+        for new_signal in SIGNALS:
+            if new_signal["label"] not in registered_labels:
+                logging.debug("Signal %s registering", new_signal["label"])
+                YC.send_message(
+                    "signal", "--add",
+                    f"event={new_signal['event']}",
+                    f"action={new_signal['action']}",
+                    f"label={new_signal['label']}",
+                    expect_result=False
+                )
+            else:
+                logging.debug("Signal %s already registered", new_signal["label"])
+
+    def deregister_signals(self):
+        for signal in SIGNALS:
+            logging.debug("Signal %s deregistering", signal["label"])
+            YC.send_message("signal", "--remove", signal["label"], expect_result=False)
 
     @property
     def activeSpace(self):
@@ -141,3 +191,4 @@ if __name__ == "__main__":
         print("Error:", e)
     finally:
         wooting_rgb_wrapper.wooting_rgb_reset()
+        SERVER.deregister_signals()
