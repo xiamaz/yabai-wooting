@@ -2,6 +2,13 @@
 
 ## Installation requirements
 
+Wooting RGB SDK needs to be installed. This can be easily done with Homebrew
+using the following command:
+
+```
+brew install xiamaz/formula/wooting-rgb-sdk
+```
+
 Both https://github.com/xiamaz/python-yabai-client and
 https://github.com/xiamaz/python-wooting-rgb need to be installed before these
 scripts can be run.

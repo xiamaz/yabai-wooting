@@ -67,7 +67,7 @@ class YabaiWootingServer:
                 break
 
     def _initialize(self):
-        spaces_info = YC.send_message("query --spaces")
+        spaces_info = YC.send_message("query", "--spaces")
         self._spacesData = spaces_info
 
         new_status = []

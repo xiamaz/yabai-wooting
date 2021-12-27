@@ -11,7 +11,7 @@ active_id = int(sys.argv[1])
 last_id = int(sys.argv[2])
 
 yc = YabaiClient()
-spaces_info = yc.send_message("query --spaces")
+spaces_info = yc.send_message("query", "--spaces")
 
 active_index = 0
 last_index = 0

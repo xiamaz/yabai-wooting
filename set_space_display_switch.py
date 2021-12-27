@@ -11,7 +11,7 @@ active_did = int(sys.argv[1])
 last_did = int(sys.argv[2])
 
 yc = YabaiClient()
-display_infos = yc.send_message("query --displays")
+display_infos = yc.send_message("query", "--displays")
 active_dindex = 0
 last_dindex = 0
 for display_info in display_infos:
@@ -23,7 +23,7 @@ for display_info in display_infos:
 if active_dindex == 0 or last_dindex == 0:
     raise RuntimeError("Could not find display index")
 
-spaces_info = yc.send_message("query --spaces")
+spaces_info = yc.send_message("query", "--spaces")
 
 active_index = 0
 last_index = 0
