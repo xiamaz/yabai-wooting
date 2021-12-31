@@ -30,6 +30,16 @@ This requires `wooting_space_server.py` to be running in the background.
 The script will automatically add rules into yabai. These will also be removed
 on script exit.
 
+Alternatively add the following rules:
+
+```
+yabai -m signal --add event=space_changed action='echo "space $YABAI_SPACE_ID" | nc -U /tmp/yabai-wooting.socket' label=wootserv
+yabai -m signal --add event=display_changed action='echo "refresh $YABAI_DISPLAY_ID" | nc -U /tmp/yabai-wooting.socket' label=wootservdisplay
+yabai -m signal --add event=mission_control_exit action='echo "refresh $YABAI_DISPLAY_ID" | nc -U /tmp/yabai-wooting.socket' label=wootservmc
+yabai -m signal --add event=display_added action='echo "refresh $YABAI_DISPLAY_ID" | nc -U /tmp/yabai-wooting.socket' label=wootservda
+yabai -m signal --add event=display_removed action='echo "refresh $YABAI_DISPLAY_ID" | nc -U /tmp/yabai-wooting.socket' label=wootservdr
+```
+
 In order for the space type indicator to work properly any keybinds that modify
 the space type will need to have the following command as a part:
 
